@@ -1,6 +1,5 @@
 package com.chitas.carderio.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@SuppressWarnings("unused")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -34,7 +32,6 @@ public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
     private final UserDetailsService userDetailsService;
 
-    @Autowired
     public SecurityConfiguration(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtFilter = jwtFilter;

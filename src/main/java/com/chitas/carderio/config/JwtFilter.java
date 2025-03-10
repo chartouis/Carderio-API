@@ -1,13 +1,12 @@
 package com.chitas.carderio.config;
 
-import com.chitas.carderio.model.UserPrincipal;
 import com.chitas.carderio.service.CarderioUserDetailsService;
 import com.chitas.carderio.service.JWTService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +24,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private ApplicationContext context;
 
-    @Autowired
     public JwtFilter(JWTService jwtService, ApplicationContext context){
         this.jwtService = jwtService;
         this.context = context;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");

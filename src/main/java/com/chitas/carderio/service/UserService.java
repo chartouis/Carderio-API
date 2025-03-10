@@ -5,7 +5,6 @@ import com.chitas.carderio.model.JWT;
 import com.chitas.carderio.model.User;
 import com.chitas.carderio.repo.UsersRepo;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +24,6 @@ public class UserService {
     private final JWTService jwtService;
     CookieMakerService cook;
 
-    @Autowired
     public UserService(UsersRepo repo, AuthenticationManager manager, JWTService jwtservice, CookieMakerService cook){
         this.repo = repo;
         this.manager = manager;

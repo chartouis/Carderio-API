@@ -9,7 +9,6 @@ import com.chitas.carderio.model.api.RequestDate;
 import com.chitas.carderio.repo.CardsRepo;
 import com.chitas.carderio.repo.UsersRepo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ public class CardService {
     private final CardsRepo cardsRepo;
 
 
-    @Autowired
     public CardService(UsersRepo usersRepo, CardsRepo cardsRepo){
         this.cardsRepo = cardsRepo;
         this.usersRepo = usersRepo;

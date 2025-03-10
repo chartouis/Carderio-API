@@ -7,19 +7,17 @@ import com.chitas.carderio.model.api.Progress;
 import com.chitas.carderio.model.api.RequestDate;
 import com.chitas.carderio.repo.CardsRepo;
 import com.chitas.carderio.service.CardService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/cards")
 public class CardController {
 
     private final CardService cardService;
 
-    @Autowired
+    
     public CardController(CardsRepo cardsRepository, CardService cardService) {
         this.cardService = cardService;
     }
