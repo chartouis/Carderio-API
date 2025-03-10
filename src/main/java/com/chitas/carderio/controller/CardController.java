@@ -25,12 +25,12 @@ public class CardController {
     }
 
     @PostMapping
-    public CardDTO createCard(@RequestBody Card card){
+    public CardDTO createCard(@RequestBody Card card) {
         return cardService.createCard(card);
     }
 
     @PostMapping("/m")
-    public List<CardDTO> createCards(@RequestBody List<Card> cards){
+    public List<CardDTO> createCards(@RequestBody List<Card> cards) {
         return cardService.createCards(cards);
     }
 
@@ -44,31 +44,36 @@ public class CardController {
         return cardService.cardIdToDto(id);
     }
 
-    //@Transactional
+    // @Transactional
     @DeleteMapping("/{id}")
     public void deleteCard(@PathVariable Long id) {
         cardService.deleteById(id);
     }
 
     @PatchMapping("/request")
-    public CardCheck evaluate(@RequestBody CardCheck cardCheck){
+    public CardCheck evaluate(@RequestBody CardCheck cardCheck) {
         cardService.evaluate(cardCheck, cardCheck.getLocalDateTime());
         return cardCheck;
     }
 
-    //Used to get the cards to actually show and open
     @PostMapping("/request")
-    public CardDTO getStack(@RequestBody RequestDate requestDate){
-        return cardService.getStack(requestDate.getLocalDateTime());
+    public List<CardDTO> getStack(@RequestBody RequestDate requestDate) {
+        return cardService.getStack(requestDate);
     }
+    // Used to get the cards to actually show and open
+    // @Deprecated
+    // //@PostMapping("/request")
+    // public CardDTO getFCard(@RequestBody RequestDate requestDate){
+    // return cardService.getFCard(requestDate.getLocalDateTime());
+    // }
 
     @PostMapping("/request/progress")
-    public Progress getProgress(@RequestBody RequestDate requestDate){
+    public Progress getProgress(@RequestBody RequestDate requestDate) {
         return cardService.getProgress(requestDate);
     }
 
     @PatchMapping
-    public CardDTO changeCard(@RequestBody CardDTO newCard){
+    public CardDTO changeCard(@RequestBody CardDTO newCard) {
         return cardService.patchCard(newCard);
     }
 

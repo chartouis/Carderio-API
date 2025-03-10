@@ -1,6 +1,5 @@
 package com.chitas.carderio.controller;
 
-
 import com.chitas.carderio.model.DTO.UserDTO;
 import com.chitas.carderio.model.JWT;
 import com.chitas.carderio.model.User;
@@ -13,14 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping
 public class UserController {
 
     private final UserService userService;
-
 
     @Autowired
     public UserController(UsersRepo usersRepo, UserService userService) {
@@ -33,9 +30,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public JWT login(@RequestBody User user, HttpServletResponse response){
-        return userService.verify(user,response);
+    public JWT login(@RequestBody User user, HttpServletResponse response) {
+        return userService.verify(user, response);
     }
-
 
 }

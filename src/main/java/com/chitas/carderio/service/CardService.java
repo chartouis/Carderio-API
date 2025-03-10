@@ -92,14 +92,16 @@ public class CardService {
         updateCard(cardCheck.getCardId(), cardCheck.getIsCorrect(), requestDate);
     }
 
-    public CardDTO getStack(String localDateTime) {
-        LocalDateTime date = LocalDateTime.parse(localDateTime, DateTimeFormatter.ISO_DATE_TIME);
+    //Method that returns an appropriate card according to its date and other data
+    public List<CardDTO> getStack(RequestDate requestDate) {
+        ArrayList<CardDTO> cards = new ArrayList<>();
+        LocalDateTime date = LocalDateTime.parse(requestDate.getLocalDateTime(), DateTimeFormatter.ISO_DATE_TIME);
         for(Card card: usersRepo.findCardsByUsername(SecurityContextHolder.getContext().getAuthentication().getName())){
             if (isDue(card,date)){
-                return cardToDto(card);
+                cards.add(cardToDto(card));
             }
         }
-        return null;
+        return cards;
     }
 
 //    public void printOutCard(Card card){
@@ -218,4 +220,6 @@ public class CardService {
         cardsRepo.save(card);
         return newCard;
     }
+
+
 }
