@@ -131,6 +131,9 @@ public class CardService {
         Float currentInterval = card.getInterval();
         Integer learningStep = card.getLearningStep();
         LocalDateTime date = LocalDateTime.parse(requestDate, DateTimeFormatter.ISO_DATE_TIME);
+        if (!isDue(card, date)) {
+            return;
+        }
         if (isCorrect) {
             if (learningStep > 0) {
                 // Exit relearning phase
