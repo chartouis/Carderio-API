@@ -3,6 +3,7 @@ package com.chitas.carderio.service;
 import com.chitas.carderio.model.Card;
 import com.chitas.carderio.model.DTO.CardDTO;
 import com.chitas.carderio.model.User;
+import com.chitas.carderio.model.api.AIprompt;
 import com.chitas.carderio.model.api.CardCheck;
 import com.chitas.carderio.model.api.Progress;
 import com.chitas.carderio.model.api.RequestDate;
@@ -24,11 +25,13 @@ public class CardService {
 
     private final UsersRepo usersRepo;
     private final CardsRepo cardsRepo;
+    private final AIService aiService;
 
 
     public CardService(UsersRepo usersRepo, CardsRepo cardsRepo){
         this.cardsRepo = cardsRepo;
         this.usersRepo = usersRepo;
+        this.aiService = new AIService();
 
     }
 
@@ -220,6 +223,10 @@ public class CardService {
         card.setFront(newCard.getFront());
         cardsRepo.save(card);
         return newCard;
+    }
+
+    public List<CardDTO> generateAIStack(AIprompt prompt) {
+        return aiService.generateAIStack(prompt);
     }
 
 

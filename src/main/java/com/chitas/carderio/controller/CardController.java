@@ -2,6 +2,7 @@ package com.chitas.carderio.controller;
 
 import com.chitas.carderio.model.Card;
 import com.chitas.carderio.model.DTO.CardDTO;
+import com.chitas.carderio.model.api.AIprompt;
 import com.chitas.carderio.model.api.CardCheck;
 import com.chitas.carderio.model.api.Progress;
 import com.chitas.carderio.model.api.RequestDate;
@@ -10,6 +11,9 @@ import com.chitas.carderio.service.CardService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/cards")
@@ -31,6 +35,13 @@ public class CardController {
     public List<CardDTO> createCards(@RequestBody List<Card> cards) {
         return cardService.createCards(cards);
     }
+
+    @PostMapping("/m/ai")
+    public List<CardDTO> postMethodName(@RequestBody AIprompt prompt) {
+        //TODO: this will receive a prompt in string which will be sended to an ai
+        return cardService.generateAIStack(prompt);
+    }
+    
 
     @GetMapping
     public List<CardDTO> getAllCards() {
