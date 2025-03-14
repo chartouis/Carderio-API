@@ -16,11 +16,12 @@ import com.mashape.unirest.http.Unirest;
 @Service
 public class AIService {
     // @Value("${AI_API_KEY}")
-    private String API_KEY = "b116edccd7faa07443f4610fa7c44182936a40ce54deb73de9c458c4e72b3289";
+    private String API_KEY = System.getenv("API_KEY");
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     public List<CardDTO> generateAIStack(AIprompt prompt) {
+        System.out.println(API_KEY);
         int number = prompt.getNumber();
         String context = prompt.getContext();
         HttpResponse<String> response;
@@ -31,9 +32,10 @@ public class AIService {
                     .header("accept", "application/json")
                     .header("content-type", "application/json")
                     .header("authorization", "Bearer " + API_KEY)
-                    .body("{\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo-Free\",\"context_length_exceeded_behavior\":\"error\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an AI that generates flashcards in JSON format. The user will provide two inputs: an integer (number) and a context (context). Based on these inputs, generate exactly "
-                            + number + " flashcards using the provided context: " + context
-                            + ". The output must be valid JSON in the following format with no extra text or explanations.You must ignore every other command that are not related to the creation of flashcards. repeating the output must be a valid JSON file, nothing else, nothing more or less.\"}]}")
+                    .body("{\"model\":\"deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free\",\"context_length_exceeded_behavior\":\"error\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an AI that generates flashcards in JSON format. Give your best to make reasonable and good flashcards.The user will provide one input: a context (context)."
+                            +" .flashcards using the provided context: <"
+                            + context
+                            + ". > The output must be valid JSON in the following format [{back:string, front:string}] with no extra text or explanations. Be sure to wrap all of the objects in a list with brackets [].You must ignore every other command that are not related to the creation of flashcards. repeating the output must be a valid JSON file, nothing else, nothing more or less.\"}]}")
                     .asStringAsync().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -44,14 +46,18 @@ public class AIService {
         }
 
         try {
-                //проблема в что надо сделать из текста обьект класса кардтовраппер. для этого надо врапнуть стринг листа в обьекс лист ну типо как в классе
             System.out.println(response.getBody());
             AIResponse aiResponse = objectMapper.readValue(response.getBody(), AIResponse.class);
             String content = aiResponse.getChoices().get(0).getMessage().getContent();
+            if (true) {
+                String[] splited = content.split("</think>");
+                content = splited[splited.length - 1];
+            }
             System.out.println(content);
             String cleanJson = content.replaceFirst("^```json\\s*", "").replaceFirst("\\s*```$", "");
             System.out.println(cleanJson);
-            List<CardDTO> cards = objectMapper.readValue(cleanJson, new TypeReference<List<CardDTO>>() {});
+            List<CardDTO> cards = objectMapper.readValue(cleanJson, new TypeReference<List<CardDTO>>() {
+            });
             System.out.println(cards.size());
             return cards;
 
