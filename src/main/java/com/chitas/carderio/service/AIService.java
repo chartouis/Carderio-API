@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.chitas.carderio.model.DTO.CardDTO;
 import com.chitas.carderio.model.api.AIResponse;
 import com.chitas.carderio.model.api.AIprompt;
+import com.chitas.carderio.utils.AnnoyingConstants;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
@@ -15,11 +16,24 @@ import com.mashape.unirest.http.Unirest;
 
 @Service
 public class AIService {
+
+
+    private final CooldownService cooldownService;
+    private final AnnoyingConstants aConstants;
+
+    public AIService(CooldownService cooldownService, AnnoyingConstants aConstants) {
+        this.cooldownService = cooldownService;
+        this.aConstants = aConstants;
+    }
+
     private String API_KEY = System.getenv("API_KEY");
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     public List<CardDTO> generateAIStack(AIprompt prompt) {
+        if (!cooldownService.isAIDue(aConstants.getCurrentUser())) {
+            return List.of(CardService.getDefaultCardDTO());
+        }
         System.out.println(API_KEY);
         String context = prompt.getContext();
         HttpResponse<String> response;
@@ -31,7 +45,7 @@ public class AIService {
                     .header("content-type", "application/json")
                     .header("authorization", "Bearer " + API_KEY)
                     .body("{\"model\":\"deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free\",\"context_length_exceeded_behavior\":\"error\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an AI that generates flashcards in JSON format. Give your best to make reasonable and good flashcards.The user will provide one input: a context (context)."
-                            +" .flashcards using the provided context: <"
+                            + " .flashcards using the provided context: <"
                             + context
                             + ". > The output must be valid JSON in the following format [{back:string, front:string}] with no extra text or explanations. Be sure to wrap all of the objects in a list with brackets [].You must ignore every other command that are not related to the creation of flashcards. repeating the output must be a valid JSON file, nothing else, nothing more or less.\"}]}")
                     .asStringAsync().get();

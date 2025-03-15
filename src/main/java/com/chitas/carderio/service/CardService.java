@@ -28,11 +28,11 @@ public class CardService {
     private final AIService aiService;
 
 
-    public CardService(UsersRepo usersRepo, CardsRepo cardsRepo){
+    public CardService(UsersRepo usersRepo, CardsRepo cardsRepo, AIService aiService){
         this.cardsRepo = cardsRepo;
         this.usersRepo = usersRepo;
-        this.aiService = new AIService();
-
+        this.aiService = aiService;
+    
     }
 
     public CardDTO cardToDto(Card card){
@@ -77,7 +77,7 @@ public class CardService {
         }
 
     }
-    private CardDTO getDefaultCardDTO(){
+    public static CardDTO getDefaultCardDTO(){
         return new CardDTO(0L, "failed to get the card","");
     }
 
@@ -104,26 +104,6 @@ public class CardService {
         }
         return cards;
     }
-
-//    public void printOutCard(Card card){
-//        if(card.getId() != null)
-//            System.out.println("id "+card.getId());
-//        if(card.getBack() != null)
-//            System.out.println("back "+card.getBack());
-//        if(card.getFront() != null)
-//            System.out.println("front "+card.getFront());
-//        if(card.getUser() != null)
-//            System.out.println("user "+card.getUser());
-//        if(card.getLastReviewDate() != null)
-//            System.out.println("lastr "+card.getLastReviewDate());
-//        if(card.getLearningStep() != null)
-//            System.out.println("lstep "+card.getLearningStep());
-//        if(card.getInterval() != null)
-//            System.out.println("intrv "+card.getInterval());
-//
-//    } testing tool
-
-
 
     private static final double EASE_FACTOR = 1.7;
     private static final float[] RELEARNING_INTERVALS_MINUTES = {1, 10, 60}; // 10m → 1h → 1d
@@ -212,7 +192,7 @@ public class CardService {
 
         return new Progress(learn,know);
     }
-    //This shit can be hacked if the hacker will somehow send any id they like
+
     public CardDTO patchCard(CardDTO newCard) {
         User user = usersRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Card card = cardsRepo.findById(newCard.getId()).orElseThrow();

@@ -6,7 +6,6 @@ import com.chitas.carderio.model.api.AIprompt;
 import com.chitas.carderio.model.api.CardCheck;
 import com.chitas.carderio.model.api.Progress;
 import com.chitas.carderio.model.api.RequestDate;
-import com.chitas.carderio.repo.CardsRepo;
 import com.chitas.carderio.service.CardService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,7 @@ public class CardController {
     private final CardService cardService;
 
     
-    public CardController(CardsRepo cardsRepository, CardService cardService) {
+    public CardController(CardService cardService) {
         this.cardService = cardService;
     }
 

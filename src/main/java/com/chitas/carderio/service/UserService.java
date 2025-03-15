@@ -1,8 +1,10 @@
 package com.chitas.carderio.service;
 
 import com.chitas.carderio.model.DTO.UserDTO;
+import com.chitas.carderio.model.CoolDown;
 import com.chitas.carderio.model.JWT;
 import com.chitas.carderio.model.User;
+import com.chitas.carderio.repo.AICooldownRepo;
 import com.chitas.carderio.repo.UsersRepo;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -19,12 +21,15 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserService {
+
+    private final AICooldownRepo aiCooldownRepo;
     private final UsersRepo repo;
     private final AuthenticationManager manager;
     private final JWTService jwtService;
     CookieMakerService cook;
 
-    public UserService(UsersRepo repo, AuthenticationManager manager, JWTService jwtservice, CookieMakerService cook){
+    public UserService(UsersRepo repo, AuthenticationManager manager, JWTService jwtservice, CookieMakerService cook, AICooldownRepo AICooldownRepo, AICooldownRepo aiCooldownRepo2){
+        this.aiCooldownRepo = aiCooldownRepo2;
         this.repo = repo;
         this.manager = manager;
         this.jwtService = jwtservice;
@@ -48,6 +53,10 @@ public class UserService {
         }
         user.setPassword(encoder.encode(user.getPassword()));
         repo.save(user);
+        CoolDown cd = new CoolDown();
+        cd.setUser(user);
+        aiCooldownRepo.save(cd);
+
         return new UserDTO(user.getId(),user.getUsername(), user.getEmail(), user.getCreatedAt());
     }
 
