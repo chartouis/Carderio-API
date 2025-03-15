@@ -15,14 +15,12 @@ import com.mashape.unirest.http.Unirest;
 
 @Service
 public class AIService {
-    // @Value("${AI_API_KEY}")
     private String API_KEY = System.getenv("API_KEY");
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     public List<CardDTO> generateAIStack(AIprompt prompt) {
         System.out.println(API_KEY);
-        int number = prompt.getNumber();
         String context = prompt.getContext();
         HttpResponse<String> response;
 

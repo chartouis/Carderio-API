@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class AIprompt {
     private String context;
-    private int number;
+
 }
