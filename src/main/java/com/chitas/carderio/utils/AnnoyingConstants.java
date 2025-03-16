@@ -1,12 +1,12 @@
 package com.chitas.carderio.utils;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import com.chitas.carderio.model.User;
 import com.chitas.carderio.repo.UsersRepo;
 
-@Configuration
+@Component
 public class AnnoyingConstants {
     private final UsersRepo usersRepo;
 
