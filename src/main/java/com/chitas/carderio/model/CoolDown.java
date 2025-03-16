@@ -22,4 +22,9 @@ public class CoolDown {
     @OneToOne
     @JoinColumn(name = "user_id") // This should match the column name in the database
     private User user;  // Change from Long to User object
+
+    @Override
+    public String toString() {
+        return "cooldown : id-"+id+" lastUse-"+lastUse+" used_id-"+user.getId();
+    }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Console appender -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Customize pattern as needed -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Set the root log level and attach the console appender -->
+    <root level="INFO">
+        <appender-ref ref="Console" />
+    </root>
+
+    <!-- Example: Override specific package log levels -->
+    <logger name="org.hibernate.SQL" level="INFO" />
+    <logger name="org.springframework" level="INFO" />
+
+</configuration>

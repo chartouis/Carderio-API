@@ -12,4 +12,9 @@ public class UserDTO {
     private String username;
     private String email;
     private LocalDateTime createdAt;
+
+    @Override
+    public String toString() {
+        return "userDTO : id-"+id+" username-"+username+" email-"+email;
+    }
 }

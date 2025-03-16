@@ -35,4 +35,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards;
 
+    @Override
+    public String toString() {
+        return "user : id-"+id+" username-"+username+" email-"+email;
+    }
 }

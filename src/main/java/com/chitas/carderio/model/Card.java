@@ -29,4 +29,9 @@ public class Card {
     @JoinColumn(name = "user_id")
     private User user; // One-to-Many with User
 
+    @Override
+    public String toString() {
+        return "card : id-"+id+" back-"+back+" front-"+front+" interval-"+interval+" step-"+learningStep;
+    }
+
 }
