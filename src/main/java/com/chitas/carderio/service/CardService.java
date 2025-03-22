@@ -105,9 +105,9 @@ public class CardService {
         return cards;
     }
 
-    private static final double EASE_FACTOR = 1.7;
-    private static final float[] RELEARNING_INTERVALS_MINUTES = {1, 10, 60}; // 10m → 1h → 1d
-    private static final float INITIAL_INTERVAL_DAYS = 0.007f; // Start with 1 day
+    private static final double EASE_FACTOR = 2;
+    private static final float[] RELEARNING_INTERVALS_MINUTES = {1, 10, 60}; 
+    private static final float INITIAL_INTERVAL_DAYS = 0.007f; 
 
     public void updateCard(Long cardId, boolean isCorrect, String requestDate) {
         Card card = cardsRepo.findById(cardId).orElseThrow();

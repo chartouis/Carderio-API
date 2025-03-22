@@ -13,14 +13,12 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/cards")
 public class CardController {
 
     private final CardService cardService;
 
-    
     public CardController(CardService cardService) {
         this.cardService = cardService;
     }
@@ -37,10 +35,11 @@ public class CardController {
 
     @PostMapping("/m/ai")
     public List<CardDTO> postMethodName(@RequestBody AIprompt prompt) {
-        //TODO: this will receive a prompt in string which will be sended to an ai
+        // TODO: this will receive a prompt in string which will be sended to an ai
         return cardService.generateAIStack(prompt);
+        // return List.of(new CardDTO("ass1", "ass"), new CardDTO("ass2", "ass"), new CardDTO("ass3", "ass"),
+        //         new CardDTO("ass4", "ass"), new CardDTO("ass5", "ass"), new CardDTO("ass6", "ass")); //test function
     }
-    
 
     @GetMapping
     public List<CardDTO> getAllCards() {
