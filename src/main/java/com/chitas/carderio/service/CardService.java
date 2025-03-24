@@ -9,9 +9,8 @@ import com.chitas.carderio.model.api.Progress;
 import com.chitas.carderio.model.api.RequestDate;
 import com.chitas.carderio.repo.CardsRepo;
 import com.chitas.carderio.repo.UsersRepo;
+import com.chitas.carderio.utils.AnnoyingConstants;
 
-
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,12 +25,14 @@ public class CardService {
     private final UsersRepo usersRepo;
     private final CardsRepo cardsRepo;
     private final AIService aiService;
+    private final AnnoyingConstants aconst;
 
 
-    public CardService(UsersRepo usersRepo, CardsRepo cardsRepo, AIService aiService){
+    public CardService(UsersRepo usersRepo, CardsRepo cardsRepo, AIService aiService, AnnoyingConstants aconst){
         this.cardsRepo = cardsRepo;
         this.usersRepo = usersRepo;
         this.aiService = aiService;
+        this.aconst = aconst;
     
     }
 
@@ -54,12 +55,12 @@ public class CardService {
     }
 
     public List<CardDTO> getUserCards() {
-        return convertToDto(usersRepo.findCardsByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return convertToDto(usersRepo.findCardsByUsername(aconst.getCurrentUsername()));
     }
 
 
     public CardDTO createCard(Card card) {
-        card.setUser(usersRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+        card.setUser(aconst.getCurrentUser());
         cardsRepo.save(card);
         return new CardDTO(card.getId(), card.getBack(), card.getFront());
     }
@@ -69,7 +70,7 @@ public class CardService {
             System.out.println("A card with this id does not exist");
             return;}
         String cardUsername = cardsRepo.findById(id).orElseThrow().getUser().getUsername();
-        String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        String senderUsername = aconst.getCurrentUsername();
         if (senderUsername.equals(cardUsername)){
             cardsRepo.deleteById(id);
         } else{
@@ -97,7 +98,7 @@ public class CardService {
     public List<CardDTO> getStack(RequestDate requestDate) {
         ArrayList<CardDTO> cards = new ArrayList<>();
         LocalDateTime date = LocalDateTime.parse(requestDate.getLocalDateTime(), DateTimeFormatter.ISO_DATE_TIME);
-        for(Card card: usersRepo.findCardsByUsername(SecurityContextHolder.getContext().getAuthentication().getName())){
+        for(Card card: usersRepo.findCardsByUsername(aconst.getCurrentUsername())){
             if (isDue(card,date)){
                 cards.add(cardToDto(card));
             }
@@ -182,7 +183,7 @@ public class CardService {
         long learn = 0;
         long know = 0;
         LocalDateTime date = LocalDateTime.parse(requestDate.getLocalDateTime(), DateTimeFormatter.ISO_DATE_TIME);
-        for(Card card : usersRepo.findCardsByUsername(SecurityContextHolder.getContext().getAuthentication().getName())){
+        for(Card card : usersRepo.findCardsByUsername(aconst.getCurrentUsername())){
             if (isDue(card, date)){
                 learn+=1;
             }else {
@@ -194,7 +195,7 @@ public class CardService {
     }
 
     public CardDTO patchCard(CardDTO newCard) {
-        User user = usersRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = aconst.getCurrentUser();
         Card card = cardsRepo.findById(newCard.getId()).orElseThrow();
         if(!card.getUser().getId().equals(user.getId())){
             return getDefaultCardDTO();

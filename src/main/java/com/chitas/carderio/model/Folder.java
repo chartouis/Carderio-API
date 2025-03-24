@@ -2,8 +2,6 @@ package com.chitas.carderio.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,13 +27,15 @@ public class Folder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
     private Folder parent;
 
     @OneToMany(mappedBy = "folder", fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<Card> cards;
 
     @Column(nullable = false)
     private int depth;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
