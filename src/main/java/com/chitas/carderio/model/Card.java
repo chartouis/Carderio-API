@@ -34,4 +34,8 @@ public class Card {
         return "card : id-"+id+" back-"+back+" front-"+front+" interval-"+interval+" step-"+learningStep;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "folder_id")
+    private Folder folder;
+
 }
