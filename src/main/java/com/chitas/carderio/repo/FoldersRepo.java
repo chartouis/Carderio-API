@@ -9,5 +9,6 @@ import java.util.List;
 public interface FoldersRepo extends JpaRepository<Folder, Long> {
     List<Folder> findByParentId(Long parentId); // Get subfolders
     List<Folder> findByDepth(int depth);        // Get folders by depth
+    List<Folder> findByUserId(Long id);
 }
 
