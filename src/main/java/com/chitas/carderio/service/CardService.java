@@ -37,7 +37,8 @@ public class CardService {
     }
 
     public CardDTO cardToDto(Card card){
-        return new CardDTO(card.getId(), card.getBack(), card.getFront());
+        Long folderId = (card.getFolder() == null) ? 0L : card.getFolder().getId();
+        return new CardDTO(card.getId(), card.getBack(), card.getFront(), folderId);
     }
 
     public CardDTO cardIdToDto(Long id){
@@ -45,7 +46,8 @@ public class CardService {
             System.out.println("A card with this id does not exist");
             return getDefaultCardDTO();}
         Card card = cardsRepo.findById(id).orElseThrow();
-        return new CardDTO(card.getId(), card.getBack(), card.getFront());
+        Long folderId = (card.getFolder() == null) ? 0L : card.getFolder().getId();
+        return new CardDTO(card.getId(), card.getBack(), card.getFront(), folderId);
     }
 
     public List<CardDTO> convertToDto(List<Card> cards) {
@@ -62,7 +64,8 @@ public class CardService {
     public CardDTO createCard(Card card) {
         card.setUser(aconst.getCurrentUser());
         cardsRepo.save(card);
-        return new CardDTO(card.getId(), card.getBack(), card.getFront());
+        Long folderId = (card.getFolder() == null) ? 0L : card.getFolder().getId();
+        return new CardDTO(card.getId(), card.getBack(), card.getFront(), folderId);
     }
 
     public void deleteById(Long id) {
@@ -79,7 +82,7 @@ public class CardService {
 
     }
     public static CardDTO getDefaultCardDTO(){
-        return new CardDTO(0L, "failed to get the card","");
+        return new CardDTO(0L, "failed to get the card","",0L);
     }
 
     public List<CardDTO> createCards(List<Card> cards) {

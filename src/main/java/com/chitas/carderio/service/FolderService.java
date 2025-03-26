@@ -34,6 +34,7 @@ public class FolderService {
     }
 
     public Folder createFolder(Folder folder) {
+        
         folder.setUser(aconst.getCurrentUser());
         if (folder.getParent() == null) {
             folder.setDepth(0);

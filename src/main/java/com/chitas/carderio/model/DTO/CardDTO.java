@@ -16,6 +16,7 @@ public class CardDTO {
     private Long id;
     private String back;
     private String front;
+    private Long folderId;
 
 
     @Override

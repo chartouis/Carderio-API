@@ -25,6 +25,9 @@ public class FolderController {
 
     @PostMapping
     public ResponseEntity<String> createFolder(@RequestBody Folder folder) {
+        if (folderService.getAllUserFolders().size() > 7) {
+            return ResponseEntity.badRequest().body("Folder Limit Reached");
+        }
         Folder created = folderService.createFolder(folder);
         if (created == null) {
             return ResponseEntity.badRequest().body("Failed to create folder");
@@ -33,8 +36,8 @@ public class FolderController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateFolder(@PathVariable Long id, @RequestBody String name) {
-        Folder updated = folderService.updateFolder(id, name);
+    public ResponseEntity<String> updateFolder(@PathVariable Long id, @RequestBody FolderDTO name) {
+        Folder updated = folderService.updateFolder(id, name.getName());
         if (updated == null) {
             return ResponseEntity.badRequest().body("Failed to update folder");
         }
