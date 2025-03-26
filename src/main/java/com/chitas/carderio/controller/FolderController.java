@@ -6,6 +6,7 @@ import com.chitas.carderio.model.Card;
 import com.chitas.carderio.model.Folder;
 import com.chitas.carderio.model.DTO.CardDTO;
 import com.chitas.carderio.model.DTO.FolderDTO;
+import com.chitas.carderio.model.api.RequestDate;
 import com.chitas.carderio.service.CardService;
 import com.chitas.carderio.service.FolderService;
 import java.util.List;
@@ -55,6 +56,12 @@ public class FolderController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cardService.convertToDto(cards));
+    }
+
+    @PostMapping("/{id}/cards")
+    public ResponseEntity<List<CardDTO>> getStackInFolder(@PathVariable Long id, @RequestBody RequestDate requestDate) {
+        List<CardDTO> cards = folderService.getStackInFolder(id, requestDate);
+        return ResponseEntity.ok(cards);
     }
 
     @PostMapping("/{folderId}/cards/{cardId}")

@@ -3,10 +3,15 @@ package com.chitas.carderio.service;
 import org.springframework.stereotype.Service;
 import com.chitas.carderio.model.Card;
 import com.chitas.carderio.model.Folder;
+import com.chitas.carderio.model.DTO.CardDTO;
 import com.chitas.carderio.model.DTO.FolderDTO;
+import com.chitas.carderio.model.api.RequestDate;
 import com.chitas.carderio.repo.CardsRepo;
 import com.chitas.carderio.repo.FoldersRepo;
 import com.chitas.carderio.utils.AnnoyingConstants;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -17,13 +22,15 @@ public class FolderService {
     private final FoldersRepo folderRepository;
     private final CardsRepo cardRepository;
     private final AnnoyingConstants aconst;
+    private final CardService cardService;
     private static final Logger LOGGER = Logger.getLogger(FolderService.class.getName());
     private static final int MAX_DEPTH = 5;
 
-    public FolderService(CardsRepo cardRepository, FoldersRepo folderRepository, AnnoyingConstants aconst) {
+    public FolderService(CardsRepo cardRepository, FoldersRepo folderRepository, AnnoyingConstants aconst, CardService cardService) {
         this.folderRepository = folderRepository;
         this.cardRepository = cardRepository;
         this.aconst = aconst;
+        this.cardService = cardService;
     }
 
     public Folder createFolder(Folder folder) {
@@ -117,5 +124,17 @@ public class FolderService {
             dtos.add(new FolderDTO(folder.getId(), folder.getName(), parentId));
         }
         return dtos;
+    }
+
+    public List<CardDTO> getStackInFolder(Long id, RequestDate requestDate) {
+        
+        ArrayList<CardDTO> cards = new ArrayList<>();
+        LocalDateTime date = LocalDateTime.parse(requestDate.getLocalDateTime(), DateTimeFormatter.ISO_DATE_TIME);
+        for(Card card: getCardsInFolder(id) ){
+            if (cardService.isDue(card,date)){
+                cards.add(cardService.cardToDto(card));
+            }
+        }
+        return cards;
     }
 }
