@@ -109,7 +109,7 @@ public class CardService {
         return cards;
     }
 
-    private static final double EASE_FACTOR = 2;
+    private static final double EASE_FACTOR = 3;
     private static final float[] RELEARNING_INTERVALS_MINUTES = {1, 10, 60}; 
     private static final float INITIAL_INTERVAL_DAYS = 0.007f; 
 
