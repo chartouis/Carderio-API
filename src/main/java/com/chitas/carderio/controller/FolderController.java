@@ -63,6 +63,7 @@ public class FolderController {
 
     @PostMapping("/{id}/cards")
     public ResponseEntity<List<CardDTO>> getStackInFolder(@PathVariable Long id, @RequestBody RequestDate requestDate) {
+        
         List<CardDTO> cards = folderService.getStackInFolder(id, requestDate);
         return ResponseEntity.ok(cards);
     }

@@ -26,7 +26,8 @@ public class FolderService {
     private static final Logger LOGGER = Logger.getLogger(FolderService.class.getName());
     private static final int MAX_DEPTH = 5;
 
-    public FolderService(CardsRepo cardRepository, FoldersRepo folderRepository, AnnoyingConstants aconst, CardService cardService) {
+    public FolderService(CardsRepo cardRepository, FoldersRepo folderRepository, AnnoyingConstants aconst,
+            CardService cardService) {
         this.folderRepository = folderRepository;
         this.cardRepository = cardRepository;
         this.aconst = aconst;
@@ -34,7 +35,7 @@ public class FolderService {
     }
 
     public Folder createFolder(Folder folder) {
-        
+
         folder.setUser(aconst.getCurrentUser());
         if (folder.getParent() == null) {
             folder.setDepth(0);
@@ -75,6 +76,9 @@ public class FolderService {
     }
 
     public List<Card> getCardsInFolder(Long folderId) {
+        if (folderId == 0) {
+            return getCardsWithoutFolder();
+        }
         Folder folder = folderRepository.findById(folderId).orElse(null);
         if (folder == null || !folder.getUser().getId().equals(aconst.getCurrentUser().getId())) {
             LOGGER.warning("Folder not found or not owned");
@@ -83,6 +87,14 @@ public class FolderService {
         List<Card> result = new ArrayList<>();
         collectCards(folder, result);
         return result;
+    }
+
+    public List<Card> getCardsWithoutFolder() {
+        List<Card> cards = cardRepository.findByFolderIsNull();
+        if (cards == null){
+            return List.of();
+        }
+        return cards;
     }
 
     private void collectCards(Folder folder, List<Card> result) {
@@ -107,8 +119,8 @@ public class FolderService {
             LOGGER.warning("Card or folder not found");
             return false;
         }
-        if (!card.getUser().getId().equals(aconst.getCurrentUser().getId()) || 
-            !folder.getUser().getId().equals(aconst.getCurrentUser().getId())) {
+        if (!card.getUser().getId().equals(aconst.getCurrentUser().getId()) ||
+                !folder.getUser().getId().equals(aconst.getCurrentUser().getId())) {
             LOGGER.warning("Card or folder not owned by user");
             return false;
         }
@@ -128,11 +140,11 @@ public class FolderService {
     }
 
     public List<CardDTO> getStackInFolder(Long id, RequestDate requestDate) {
-        
+
         ArrayList<CardDTO> cards = new ArrayList<>();
         LocalDateTime date = LocalDateTime.parse(requestDate.getLocalDateTime(), DateTimeFormatter.ISO_DATE_TIME);
-        for(Card card: getCardsInFolder(id) ){
-            if (cardService.isDue(card,date)){
+        for (Card card : getCardsInFolder(id)) {
+            if (cardService.isDue(card, date)) {
                 cards.add(cardService.cardToDto(card));
             }
         }
