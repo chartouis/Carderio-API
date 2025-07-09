@@ -150,4 +150,14 @@ public class FolderService {
         }
         return cards;
     }
+
+    public boolean deleteCardFromFolder(Long cardId) {
+        if(!cardRepository.existsById(cardId)){
+            return false;
+        }
+        Card cardToDelete = cardRepository.findById(cardId).orElseThrow();
+        cardToDelete.setFolder(null);
+        cardRepository.save(cardToDelete);
+        return true;
+    }
 }

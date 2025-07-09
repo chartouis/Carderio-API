@@ -63,9 +63,17 @@ public class FolderController {
 
     @PostMapping("/{id}/cards")
     public ResponseEntity<List<CardDTO>> getStackInFolder(@PathVariable Long id, @RequestBody RequestDate requestDate) {
-        
+
         List<CardDTO> cards = folderService.getStackInFolder(id, requestDate);
         return ResponseEntity.ok(cards);
+    }
+
+    @DeleteMapping("/card/{cardId}")
+    public ResponseEntity<Void> deleteCardFromFolder(@PathVariable Long cardId) {
+        if (folderService.deleteCardFromFolder(cardId)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/{folderId}/cards/{cardId}")
