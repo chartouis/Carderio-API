@@ -37,8 +37,10 @@ public class CardController {
     public List<CardDTO> postMethodName(@RequestBody AIprompt prompt) {
         // TODO: this will receive a prompt in string which will be sended to an ai
         return cardService.generateAIStack(prompt);
-        // return List.of(new CardDTO("ass1", "ass"), new CardDTO("ass2", "ass"), new CardDTO("ass3", "ass"),
-        //         new CardDTO("ass4", "ass"), new CardDTO("ass5", "ass"), new CardDTO("ass6", "ass")); //test function
+        // return List.of(new CardDTO("ass1", "ass"), new CardDTO("ass2", "ass"), new
+        // CardDTO("ass3", "ass"),
+        // new CardDTO("ass4", "ass"), new CardDTO("ass5", "ass"), new CardDTO("ass6",
+        // "ass")); //test function
     }
 
     @GetMapping
@@ -53,8 +55,9 @@ public class CardController {
 
     // @Transactional
     @DeleteMapping("/{id}")
-    public void deleteCard(@PathVariable Long id) {
-        cardService.deleteById(id);
+    public boolean deleteCard(@PathVariable Long id) {
+        return cardService.deleteById(id);
+
     }
 
     @PatchMapping("/request")

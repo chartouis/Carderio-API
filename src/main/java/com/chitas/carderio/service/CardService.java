@@ -68,16 +68,18 @@ public class CardService {
         return new CardDTO(card.getId(), card.getBack(), card.getFront(), folderId);
     }
 
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
         if(!cardsRepo.existsById(id)){
             System.out.println("A card with this id does not exist");
-            return;}
+            return false;}
         String cardUsername = cardsRepo.findById(id).orElseThrow().getUser().getUsername();
         String senderUsername = aconst.getCurrentUsername();
         if (senderUsername.equals(cardUsername)){
             cardsRepo.deleteById(id);
+            return true;
         } else{
             System.out.println("This is not your card");
+            return false;
         }
 
     }
