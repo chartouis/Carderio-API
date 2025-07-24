@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CardsRepo extends JpaRepository<Card, Long> {
+    List<Card> findByUserId(Long userId);
     List<Card> findByFolderId(Long folderId);
     List<Card> findByFolderIsNull();
 }

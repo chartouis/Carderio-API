@@ -90,11 +90,18 @@ public class FolderService {
     }
 
     public List<Card> getCardsWithoutFolder() {
-        List<Card> cards = cardRepository.findByFolderIsNull();
-        if (cards == null){
+        List<Card> allUserCards = cardRepository.findByUserId(aconst.getCurrentUser().getId());
+        List<Card> targetCards = new ArrayList<>();
+        if (allUserCards == null) {
             return List.of();
         }
-        return cards;
+        for (Card card : allUserCards) {
+            if (card.getFolder() == null) {
+                targetCards.add(card);
+            }
+        }
+
+        return targetCards;
     }
 
     private void collectCards(Folder folder, List<Card> result) {
@@ -152,7 +159,7 @@ public class FolderService {
     }
 
     public boolean deleteCardFromFolder(Long cardId) {
-        if(!cardRepository.existsById(cardId)){
+        if (!cardRepository.existsById(cardId)) {
             return false;
         }
         Card cardToDelete = cardRepository.findById(cardId).orElseThrow();
